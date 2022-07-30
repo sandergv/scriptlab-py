@@ -20,13 +20,13 @@ class Scriptlab:
         self._to_set = []
         self.context._to_set = self._set_callback
         self.context._to_delete = self._del_callback
-        # self.context_id = rc["context_id"]
+        self.context_id = rc["context_id"]
         self.file_name = rc["file_name"]
         self.exec_env = rc["exec_env"]
         self.args = rc['args']
         self.env = rc['env']
         
-        # self._result_path = rc["result_path"]
+        self._result_path = rc["result_path"]
         self._result = {
             "ctx_set": {},
             "ctx_del": [],
@@ -71,7 +71,7 @@ class Scriptlab:
 
     def _save_result(self) -> None:
         print(self._result)
-        with open('restult.json', '+w') as f:
+        with open(self._result_path, '+w') as f:
             json_str = json.dumps(self._result)
             f.write(json_str)
             f.close()

@@ -1,17 +1,15 @@
-# import json
-# from scriptlab import Scriptlab
+import json
+from scriptlab import Scriptlab
 
-# sl = Scriptlab()
-# sl.context.set('test', 1)
-# sl.context.delete('test')
+sl = Scriptlab()
+sl.context.set('test', 1)
+sl.context.delete('test')
 
-# res = {
-#     "status": True,
-#     "message": "todo ok"
-# }
+res = {
+    "status": True,
+    "message": "todo ok"
+}
 
-# sl.log('log test')
+sl.log('log test')
 
-# sl.response(json.dumps(res))
-
-print('test')
+sl.response(json.dumps(res))
