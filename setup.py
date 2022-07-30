@@ -8,5 +8,6 @@ setuptools.setup(
         # package_dir={
         #     "": "scriptlab"
         # },
-    packages=setuptools.find_packages(where="scriptlab")
+    packages=setuptools.find_packages(where="scriptlab"),
+    install_requires=["requests"]
 )
