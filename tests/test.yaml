@@ -1,0 +1,21 @@
+contexts:
+  test-context: # must be unique
+    data:
+      - TEST: 'ok'
+
+  context-2:
+    data:
+      - TEST: true
+
+execs:
+  test-exec:
+    exec-env: 'default-pyenv'
+    type: 'python'
+    file-name: 'test.py'
+    context: 'test-context'
+    env:
+      - TEST: 'todo ok'
+    args:
+      - 'arg1'
+      - 'arg2'
+
