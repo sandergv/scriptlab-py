@@ -4,7 +4,7 @@ import requests
 
 from . import context
 
-url = "http://localhost:"+os.getenv("PORT")+"/v1"
+url = "http://localhost:"+os.getenv("PORT")
 
 class Scriptlab:
 
