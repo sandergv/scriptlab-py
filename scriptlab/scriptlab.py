@@ -66,7 +66,7 @@ class Scriptlab:
         })
 
         if res.status_code != 200:
-            print("request error " + res.status_code)
+            print(f"request error {res.status_code}")
             raise Exception
 
         return res.json()["details"]
