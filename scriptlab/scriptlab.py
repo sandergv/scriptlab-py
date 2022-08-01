@@ -4,7 +4,7 @@ import requests
 
 from . import context
 
-url = "http://localhost:6892/v1"
+url = "http://localhost:"+os.getenv("PORT")+"/v1"
 
 class Scriptlab:
 
@@ -12,10 +12,11 @@ class Scriptlab:
 
         # get run context
         rc = json.loads(os.getenv("RUN_CONTEXT"))
-        print(rc)
         if rc == None:
             raise Exception
 
+        self.exec_id = rc["exec_id"] if "exec_id" in rc else None
+        
         self.context = context.Context(rc["context"]) if rc["context"] else context.Context({})
         self._to_set = []
         self.context._to_set = self._set_callback
@@ -54,12 +55,21 @@ class Scriptlab:
         self._result["logs"].append(log.replace('\n', ''))
         self._save_result()
 
-    def run(self, eid: str, data: dict = {}) -> dict:
-        res = requests.post(url + "/run", json={
+    def _run(self, eid: str, data: dict = {}) -> dict:
+
+        if self.exec_id == eid:
+            print("recursion it's not allowed")
+            raise Exception
+
+        res = requests.post(url + "/run/"+eid, json={
             "body": data
         })
 
-        pass
+        if res.status_code != 200:
+            print("request error " + res.status_code)
+            raise Exception
+
+        return res.json()["details"]
 
     def response(self, data: str) -> None:
 
