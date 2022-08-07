@@ -4,7 +4,7 @@ import requests
 
 from . import context
 
-url = "http://localhost:"+os.getenv("PORT")
+url = "http://localhost:"+os.getenv("SCOPE")
 
 class Scriptlab:
 
@@ -14,10 +14,14 @@ class Scriptlab:
         rc = json.loads(os.getenv("RUN_CONTEXT"))
         if rc == None:
             raise Exception
+        self.context = None
+        if os.getenv('CTX_PATH'):
+
+            with open(os.getenv('CTX_PATH'), 'r') as f:
+                self.context = context.Context(json.load(f))
+                f.close()
 
         self.exec_id = rc["exec_id"] if "exec_id" in rc else None
-        
-        self.context = context.Context(rc["context"]) if rc["context"] else context.Context({})
         self._to_set = []
         self.context._to_set = self._set_callback
         self.context._to_delete = self._del_callback
@@ -62,7 +66,7 @@ class Scriptlab:
             raise Exception
 
         res = requests.post(url + "/run/"+eid, json={
-            "body": data
+            "data": data
         })
 
         if res.status_code != 200:
@@ -80,7 +84,7 @@ class Scriptlab:
         self._save_result()
 
     def _save_result(self) -> None:
-        print(self._result)
+        # print(self._result)
         with open(self._result_path, '+w') as f:
             json_str = json.dumps(self._result)
             f.write(json_str)
