@@ -15,16 +15,18 @@ class Scriptlab:
         if rc == None:
             raise Exception
         self.context = None
-        if os.getenv('CTX_PATH'):
+        if "context_path" in rc.keys and rc["contextpath"]:
 
-            with open(os.getenv('CTX_PATH'), 'r') as f:
+            with open(rc["contextpath"], 'r') as f:
                 self.context = context.Context(json.load(f))
                 f.close()
 
+        if self.context:
+            self.context._to_set = self._set_callback
+            self.context._to_delete = self._del_callback
+
         self.exec_id = rc["exec_id"] if "exec_id" in rc else None
         self._to_set = []
-        self.context._to_set = self._set_callback
-        self.context._to_delete = self._del_callback
         self.context_id = rc["context_id"]
         self.file_name = rc["file_name"]
         self.exec_env = rc["exec_env"]
