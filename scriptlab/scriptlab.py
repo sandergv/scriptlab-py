@@ -15,7 +15,7 @@ class Scriptlab:
         if rc == None:
             raise Exception
         self.context = None
-        if "context_path" in rc.keys() and rc["contextpath"]:
+        if "context_path" in rc.keys() and rc["context_path"]:
 
             with open(rc["contextpath"], 'r') as f:
                 self.context = context.Context(json.load(f))
