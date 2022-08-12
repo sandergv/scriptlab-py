@@ -17,7 +17,7 @@ class Scriptlab:
         self.context = None
         if "context_path" in rc.keys() and rc["context_path"]:
 
-            with open(rc["contextpath"], 'r') as f:
+            with open(rc["context_path"], 'r') as f:
                 self.context = context.Context(json.load(f))
                 f.close()
 
