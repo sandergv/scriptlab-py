@@ -1,6 +1,9 @@
 import json
 import os
+import sys
 import requests
+
+from scriptlab.action import ActionResponse
 
 from . import context
 
@@ -76,6 +79,32 @@ class Scriptlab:
             raise Exception
 
         return res.json()["details"]
+
+    def act(self, name: str, data: dict = {}) -> ActionResponse:
+        
+        url = "http://localhost:8888/action/run"
+
+        d = {
+            "name": name,
+            "data": data
+        }
+        res = requests.post(url, json=d)
+        if res.status_code != 200:
+            print(f"request error {res.status_code}")
+            raise Exception
+        
+        resp = res.json()
+        if resp["status"] != "success":
+            print(resp["error"])
+            raise Exception
+
+        for l in resp["details"]["logs"]:
+            self.log(l)
+
+        for o in resp["details"]["output"]:
+            print(o)
+
+        return ActionResponse(resp["details"]["exit_code"], resp["details"]["response"], resp["details"]["error"])
 
     def response(self, data: str) -> None:
 
