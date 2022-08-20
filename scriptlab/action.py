@@ -10,9 +10,5 @@ class ActionResponse:
 
     def json(self) -> dict:
 
-        json.loads(self.response)
-
-        return {}
-
-    def text(self) -> str:
-        return ""
+        return json.loads(self.response)
+        

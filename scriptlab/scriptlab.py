@@ -91,6 +91,7 @@ class Scriptlab:
         res = requests.post(url, json=d)
         if res.status_code != 200:
             print(f"request error {res.status_code}")
+            sys.stderr.write(res.text)
             raise Exception
         
         resp = res.json()
