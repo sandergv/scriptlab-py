@@ -35,6 +35,7 @@ class Scriptlab:
         self.exec_env = rc["exec_env"]
         self.args = rc['args']
         self.env = rc['env']
+        self.data = rc['data']
         
         self._result_path = rc["result_path"]
         self._result = {

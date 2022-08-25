@@ -9,6 +9,5 @@ class ActionResponse:
         self.error = error
 
     def json(self) -> dict:
-
         return json.loads(self.response)
         
