@@ -3,7 +3,7 @@ import os
 import sys
 import requests
 
-from scriptlab.action import ActionResponse
+from scriptlab.response import Response, RunDetails
 
 from . import context
 
@@ -81,7 +81,7 @@ class Scriptlab:
 
         return res.json()["details"]
 
-    def act(self, name: str, data: dict = {}) -> ActionResponse:
+    def act(self, name: str, data: dict = {}) -> Response:
         
         url = "http://localhost:8888/action/run"
 
@@ -90,6 +90,7 @@ class Scriptlab:
             "data": data
         }
         res = requests.post(url, json=d)
+
         if res.status_code != 200:
             print(f"request error {res.status_code}")
             sys.stderr.write(res.text)
@@ -100,13 +101,46 @@ class Scriptlab:
             print(resp["error"])
             raise Exception
 
-        for l in resp["details"]["logs"]:
+        rd = RunDetails(resp["details"])
+
+        for l in rd.logs():
             self.log(l)
 
-        for o in resp["details"]["output"]:
+        for o in rd.output():
             print(o)
 
-        return ActionResponse(resp["details"]["exit_code"], resp["details"]["response"], resp["details"]["error"])
+        return Response(rd)
+
+    def cmd(self, name: str, args: list = []) -> Response:
+        
+        url = "http://localhost:8888/command/run"
+
+        d = {
+            "name": name,
+            "args": args
+        }
+
+        res = requests.post(url, json=d)
+
+        if res.status_code != 200:
+            print(f"request error {res.status_code}")
+            sys.stderr.write(res.text)
+            raise Exception
+        
+        resp = res.json()
+        if resp["status"] != "success":
+            print(resp["error"])
+            raise Exception
+
+        rd = RunDetails(resp["details"])
+
+        for l in rd.logs():
+            self.log(l)
+
+        for o in rd.output():
+            print(o)
+
+        return Response(rd)
 
     def response(self, data: str) -> None:
 
