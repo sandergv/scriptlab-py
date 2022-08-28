@@ -125,12 +125,12 @@ class Scriptlab:
         if res.status_code != 200:
             print(f"request error {res.status_code}")
             sys.stderr.write(res.text)
-            raise Exception
+            raise Exception(res.text+" "+str(res.status_code))
         
         resp = res.json()
         if resp["status"] != "success":
             print(resp["error"])
-            raise Exception
+            raise Exception(resp["error"])
 
         rd = RunDetails(resp["details"])
 
