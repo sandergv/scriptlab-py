@@ -134,10 +134,10 @@ class Scriptlab:
 
         rd = RunDetails(resp["details"])
 
-        for l in rd.logs():
+        for l in rd.logs:
             self.log(l)
 
-        for o in rd.output():
+        for o in rd.output:
             print(o)
 
         return Response(rd)
