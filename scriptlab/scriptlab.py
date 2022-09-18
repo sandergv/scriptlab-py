@@ -3,7 +3,9 @@ import os
 import sys
 import requests
 
+
 from scriptlab.response import Response, RunDetails
+from typing import Union
 
 from . import context
 
@@ -142,12 +144,27 @@ class Scriptlab:
 
         return Response(rd)
 
-    def response(self, data: str) -> None:
+    def evt(self, name: str, message: str) -> None:
+        
+        url = f"http://localhost:8888/events/{name}/send"
 
-        if type(data) != str:
+        request = {
+            "message": message
+        }
+        res = requests.post(url, json=request)
+
+
+    def response(self, data: Union[str, dict]) -> None:
+
+        if type(data) != str and type(data) != str:
             raise TypeError
+        
+        _data = data
 
-        self._result["response"] = data
+        if type(data) == dict:
+            _data = json.dumps(data)
+
+        self._result["response"] = _data
         self._save_result()
 
     def _save_result(self) -> None:
